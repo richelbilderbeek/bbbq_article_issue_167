@@ -25,7 +25,7 @@ for (n in c(9, 13, 15)) {
       ic50 = NA
     )
 
-    chunk_size <- 10000
+    chunk_size <- 1000
     froms <- seq(1, nrow(t), by = chunk_size)
     tos <- froms + chunk_size - 1
     tos[length(tos)] <- nrow(t)
