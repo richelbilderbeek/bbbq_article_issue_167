@@ -26,7 +26,12 @@ for (n in c(9, 13, 15)) {
   if (n == 9) testthat::expect_equal(length(all_n_mers), 11223087)
   unique_n_mers <- unique(all_n_mers)
   if (n == 9) testthat::expect_equal(length(unique_n_mers), 10390570)
-  n_mers <- sort(unique_n_mers)
-  if (n == 9) testthat::expect_equal(length(n_mers), 10390570)
+  # Must all be amino acids
+  # ALQXPAPWS breaks
+  regexpr <- paste0("^[", paste0(Peptides::aaList(), collapse = ""), "]+$")
+  unique_good_n_mers <- stringr::str_subset(unique_n_mers, regexpr)
+  if (n == 9) testthat::expect_equal(length(unique_good_n_mers), 10390489)
+  n_mers <- sort(unique_good_n_mers)
+  if (n == 9) testthat::expect_equal(length(n_mers), 10390489)
   readr::write_lines(n_mers, target_filename)
 }

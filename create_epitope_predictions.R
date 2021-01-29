@@ -25,15 +25,25 @@ for (n in c(9, 13, 15)) {
       ic50 = NA
     )
 
-    chunk_size <- 1000
-    froms <- seq(1, nrow(t), by = chunk_size)
-    tos <- froms + chunk_size - 1
-    tos[length(tos)] <- nrow(t)
+    if (1 == 2) {
+      chunk_size <- 1000
+      froms <- seq(1, nrow(t), by = chunk_size)
+      tos <- froms + chunk_size - 1
+      tos[length(tos)] <- nrow(t)
+    } else {
+      chunk_size <- 1
+      froms <- seq(384742, 384742, by = chunk_size)
+      tos <- froms + chunk_size - 1
+      tos[length(tos)] <- nrow(t)
+
+    # There is an error in 384001-385000
+    # 742/1000( 384742-384742)
+    }
     testthat::expect_equal(length(froms), length(tos))
     for (i in seq_along(froms)) {
-      message(i, "/", length(froms))
       from <- froms[i]
       to <- tos[i]
+      message(i, "/", length(froms), " (", from, "-", to, ")")
       t$ic50[from:to] <- EpitopePrediction::smm(
         x = t$peptide[from:to],
         mhc = epiprepreds::to_ep_haplotype_name(haplotype)
