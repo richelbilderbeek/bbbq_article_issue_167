@@ -1,7 +1,7 @@
 
-all: 15_mers.txt
+all: 15_HLA-A_01_01_predictions.csv
 
-something.txt: 15_mers.txt
+15_HLA-A_01_01_predictions.csv: 15_mers.txt
 	Rscript create_epitope_predictions.R
 
 15_mers.txt: 
