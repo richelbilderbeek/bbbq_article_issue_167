@@ -39,3 +39,4 @@ vignettes/*.pdf
 .Renviron
 n_mers.txt
 *.txt
+*.csv
