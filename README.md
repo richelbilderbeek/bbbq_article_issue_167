@@ -4,26 +4,32 @@ BBBQ article issue 167
 
 ## Use
 
+### SARS-CoV-2
+
 ```
 make
 ```
 
-Takes appro 5 hours.
+Takes a couple of minutes
 
-##
+### Homo sapiens
 
-9_HLA-A_01_01_predictions.csv
-9_HLA-A_02_01_predictions.csv
-9_HLA-A_03_01_predictions.csv
-9_HLA-A_24_02_predictions.csv
-9_HLA-A_26_01_predictions.csv
-9_HLA-B_07_02_predictions.csv
-9_HLA-B_08_01_predictions.csv
-9_HLA-B_15_01_predictions.csv
-9_HLA-B_18_01_predictions.csv
-9_HLA-B_27_05_predictions.csv
-9_HLA-B_39_01_predictions.csv
-9_HLA-B_40_02_predictions.csv
-9_HLA-B_58_01_predictions.csv
+For the human representative reference proteome:
+
+```
+make human
+```
+
+Takes approx 5 hours.
+
+### Mycobacterium tuberculosis
+
+For the Mycobacterium tuberculosis reference proteome:
+
+```
+make myco
+```
+
+Takes approx 1 hour.
 
 
