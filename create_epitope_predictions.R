@@ -6,6 +6,7 @@ message("args: {", paste0(args, collapse = ", "), "}")
 if (1 == 2) {
   args <- c("covid", "9")
   args <- c("human", "9")
+  args <- c("covid", "15")
 }
 testthat::expect_equal(length(args), 2)
 target_name <- args[1]
@@ -18,11 +19,21 @@ testthat::expect_true(n %in% c(9, 11, 13, 15))
 source_filename <- paste0(target_name, "_", n, "_mers.txt")
 testthat::expect_true(file.exists(source_filename))
 
-ic50_prediction_tool <- "EpitopePrediction"
+haplotypes <- NA
+ic50_prediction_tool <- NA
+if (n == 9) {
+  ic50_prediction_tool <- "EpitopePrediction"
+  haplotypes <- bbbq::get_mhc1_haplotypes()
+} else {
+  testthat::expect_equal(15, n)
+  ic50_prediction_tool <- "netmhc2pan"
+  haplotypes <- bbbq::get_mhc2_haplotypes()
+}
 bbbq::check_ic50_prediction_tool(ic50_prediction_tool)
-testthat::expect_equal(ic50_prediction_tool, "EpitopePrediction")
+message("ic50_prediction_tool: ", ic50_prediction_tool)
+message("haplotypes: ", paste0(haplotypes, collapse = ", "))
 
-for (haplotype in bbbq::get_mhc1_haplotypes()) {
+for (haplotype in haplotypes) {
   message("haplotype: ", haplotype)
   target_filename <- paste0(
     target_name, "_",
@@ -50,10 +61,18 @@ for (haplotype in bbbq::get_mhc1_haplotypes()) {
     from <- froms[i]
     to <- tos[i]
     message(i, "/", length(froms), " (", from, "-", to, ")")
-    t$ic50[from:to] <- EpitopePrediction::smm(
-      x = t$peptide[from:to],
-      mhc = epiprepreds::to_ep_haplotype_name(haplotype)
-    )
+    if (ic50_prediction_tool == "EpitopePrediction") {
+      t$ic50[from:to] <- EpitopePrediction::smm(
+        x = t$peptide[from:to],
+        mhc = epiprepreds::to_ep_haplotype_name(haplotype)
+      )
+    } else {
+      testthat::expect_equal("netmhc2pan", ic50_prediction_tool)
+      t$ic50[from:to] <- netmhc2pan::predict_ic50(
+        peptides = t$peptide[from:to],
+        mhc_haplotype = netmhc2pan::to_netmhc2pan_name(haplotype)
+      )
+    }
   }
   readr::write_csv(x = t, file = target_filename)
 }
