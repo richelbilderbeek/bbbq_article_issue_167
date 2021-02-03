@@ -18,13 +18,19 @@ testthat::expect_true(n %in% c(9, 11, 13, 15))
 source_filename <- paste0(target_name, "_", n, "_mers.txt")
 testthat::expect_true(file.exists(source_filename))
 
+ic50_prediction_tool <- "EpitopePrediction"
+bbbq::check_ic50_prediction_tool(ic50_prediction_tool)
+testthat::expect_equal(ic50_prediction_tool, "EpitopePrediction")
+
 for (haplotype in bbbq::get_mhc1_haplotypes()) {
   message("haplotype: ", haplotype)
   target_filename <- paste0(
     target_name, "_",
     n, "_",
     stringr::str_replace_all(haplotype, "[:|\\*]", "_"),
-    "_ic50_ep.csv"
+    "_ic50_",
+    ic50_prediction_tool,
+    ".csv"
   )
   target_filename
 
