@@ -1,12 +1,12 @@
 all: \
   covid_9_HLA-B_58_01_ic50_EpitopePrediction.csv \
-  covid_15_HLA-DQA1_0102_DQB1_0602_ic50_EpitopePrediction.csv
+  covid_15_HLA-DQA1_0102_DQB1_0602_ic50_mhcnuggetsr.csv
 
 human: human_9_HLA-B_58_01_ic50_EpitopePrediction.csv
 
 myco: myco_9_HLA-B_58_01_ic50_EpitopePrediction.csv
 
-covid_15_HLA-DQA1_0102_DQB1_0602_ic50_EpitopePrediction.csv: covid_15_mers.txt
+covid_15_HLA-DQA1_0102_DQB1_0602_ic50_mhcnuggetsr.csv: covid_15_mers.txt
 	Rscript create_epitope_predictions.R covid 15
 
 covid_9_HLA-B_58_01_ic50_EpitopePrediction.csv: covid_9_mers.txt

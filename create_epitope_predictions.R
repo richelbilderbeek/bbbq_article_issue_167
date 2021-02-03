@@ -26,7 +26,8 @@ if (n == 9) {
   haplotypes <- bbbq::get_mhc1_haplotypes()
 } else {
   testthat::expect_equal(15, n)
-  ic50_prediction_tool <- "netmhc2pan"
+  ic50_prediction_tool <- "mhcnuggetsr"
+  # ic50_prediction_tool <- "netmhc2pan"
   haplotypes <- bbbq::get_mhc2_haplotypes()
 }
 bbbq::check_ic50_prediction_tool(ic50_prediction_tool)
@@ -38,7 +39,7 @@ for (haplotype in haplotypes) {
   target_filename <- paste0(
     target_name, "_",
     n, "_",
-    stringr::str_replace_all(haplotype, "[:|\\*]", "_"),
+    stringr::str_replace_all(haplotype, "[:|/\\*]", "_"),
     "_ic50_",
     ic50_prediction_tool,
     ".csv"
@@ -66,12 +67,20 @@ for (haplotype in haplotypes) {
         x = t$peptide[from:to],
         mhc = epiprepreds::to_ep_haplotype_name(haplotype)
       )
+    } else if (ic50_prediction_tool == "mhcnuggetsr") {
+      t$ic50[from:to] <- mhcnuggetsr::predict_ic50(
+        mhcnuggets_options = mhcnuggetsr::create_mhcnuggets_options(
+          mhc_class = NA, # Deduce automatically
+          mhc = mhcnuggetsr::to_mhcnuggets_name(haplotype)
+        ),
+        peptides = t$peptide[from:to],
+      )$ic50
     } else {
       testthat::expect_equal("netmhc2pan", ic50_prediction_tool)
       t$ic50[from:to] <- netmhc2pan::predict_ic50(
         peptides = t$peptide[from:to],
         mhc_haplotype = netmhc2pan::to_netmhc2pan_name(haplotype)
-      )
+      )$ic50
     }
   }
   readr::write_csv(x = t, file = target_filename)
