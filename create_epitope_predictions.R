@@ -44,7 +44,11 @@ for (haplotype in haplotypes) {
     ic50_prediction_tool,
     ".csv"
   )
-  target_filename
+  message("target_filename: ", target_filename)
+  if (file.exists(target_filename)) {
+    message("File already exists, going to the next one")
+    next
+  }
 
 
   t <- tibble::tibble(
