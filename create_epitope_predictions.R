@@ -6,6 +6,7 @@ message("args: {", paste0(args, collapse = ", "), "}")
 if (1 == 2) {
   args <- c("covid", "9")
   args <- c("human", "9")
+  args <- c("covid", "14")
   args <- c("covid", "15")
 }
 testthat::expect_equal(length(args), 2)
@@ -14,7 +15,8 @@ message("target_name: ", target_name)
 bbbq::check_target_name(target_name)
 n <- as.numeric(args[2])
 message("n: ", n)
-testthat::expect_true(n %in% c(9, 11, 13, 15))
+testthat::expect_true(n > 0)
+testthat::expect_true(n < 30)
 
 source_filename <- paste0(target_name, "_", n, "_mers.txt")
 testthat::expect_true(file.exists(source_filename))
@@ -25,7 +27,7 @@ if (n == 9) {
   ic50_prediction_tool <- "EpitopePrediction"
   haplotypes <- bbbq::get_mhc1_haplotypes()
 } else {
-  testthat::expect_equal(15, n)
+  testthat::expect_true(n %in% c(14, 15))
   ic50_prediction_tool <- "mhcnuggetsr"
   # ic50_prediction_tool <- "netmhc2pan"
   haplotypes <- bbbq::get_mhc2_haplotypes()
