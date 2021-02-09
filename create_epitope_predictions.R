@@ -8,6 +8,7 @@ if (1 == 2) {
   args <- c("human", "9")
   args <- c("covid", "14")
   args <- c("covid", "15")
+  args <- c("covid", "16")
 }
 testthat::expect_equal(length(args), 2)
 target_name <- args[1]
@@ -27,7 +28,8 @@ if (n == 9) {
   ic50_prediction_tool <- "EpitopePrediction"
   haplotypes <- bbbq::get_mhc1_haplotypes()
 } else {
-  testthat::expect_true(n %in% c(14, 15))
+  testthat::expect_true(n >= 12)
+  testthat::expect_true(n <= 16)
   ic50_prediction_tool <- "mhcnuggetsr"
   # ic50_prediction_tool <- "netmhc2pan"
   haplotypes <- bbbq::get_mhc2_haplotypes()
